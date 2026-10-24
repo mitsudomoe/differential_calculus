@@ -1,0 +1,288 @@
+\documentclass[10pt,a4paper]{article}
+
+% ---------- Langue et polices ----------
+\usepackage{polyglossia}
+\setdefaultlanguage{french}
+\usepackage{amsmath,mathtools}
+\usepackage{unicode-math}
+\setmainfont{Latin Modern Roman}
+\setsansfont{TeX Gyre Heros}
+\setmathfont{Latin Modern Math}
+
+% ---------- Mise en page ----------
+\usepackage[a4paper,top=1.6cm,bottom=1.8cm,left=1.8cm,right=1.8cm]{geometry}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
+\usepackage{tabularx,booktabs,array}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{multicol}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\renewcommand{\arraystretch}{1.35}
+\setlength{\columnsep}{1.2em}
+
+% ---------- Couleurs ----------
+\definecolor{bleu}{HTML}{1F4E79}
+\definecolor{bleuclair}{HTML}{EAF1F8}
+\definecolor{vert}{HTML}{2E7D32}
+\definecolor{vertclair}{HTML}{EDF6EE}
+\definecolor{orange}{HTML}{B5560B}
+\definecolor{orangeclair}{HTML}{FDF1E7}
+\definecolor{rouge}{HTML}{A61B1B}
+\definecolor{rougeclair}{HTML}{FBECEC}
+\definecolor{gris}{HTML}{5F6B76}
+\definecolor{grisclair}{HTML}{F4F6F8}
+
+% ---------- Titres de section ----------
+\titleformat{\section}{\sffamily\large\bfseries\color{bleu}}{\thesection}{0.6em}{}[\vspace{-0.4em}\textcolor{bleu!40}{\rule{\linewidth}{0.6pt}}]
+\titlespacing*{\section}{0pt}{10pt}{4pt}
+\titleformat{\subsection}{\sffamily\normalsize\bfseries\color{gris}}{}{0em}{}
+\titlespacing*{\subsection}{0pt}{6pt}{2pt}
+
+% ---------- En-tête et pied ----------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\sffamily\footnotesize\color{gris}Fiche méthode — Différentielle}
+\fancyfoot[R]{\sffamily\footnotesize\color{gris}\thepage}
+
+% ---------- Encadrés ----------
+\newtcolorbox{boite}[4][]{enhanced,colback=#3,colframe=#2,boxrule=0pt,
+  leftrule=3pt,arc=2pt,left=8pt,right=8pt,top=5pt,bottom=5pt,
+  title={\sffamily\bfseries #4},coltitle=#2,colbacktitle=#3,
+  attach title to upper,after title={\par\smallskip},#1}
+
+\newcommand{\etape}[2]{%
+  \begin{tcolorbox}[enhanced,colback=grisclair,colframe=grisclair,boxrule=0pt,arc=2pt,
+    left=34pt,right=8pt,top=4pt,bottom=4pt,before skip=3pt,after skip=3pt,
+    overlay={\node[circle,fill=bleu,text=white,font=\sffamily\bfseries,minimum size=17pt,inner sep=0pt]
+      at ([xshift=16pt]frame.west) {#1};}]
+  #2
+  \end{tcolorbox}}
+
+\newcommand{\cocher}{\item[\textcolor{vert}{$\mdlgwhtsquare$}]}
+
+% ---------- Notations ----------
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\abs}[1]{\lvert #1\rvert}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\diff}{\mathrm{d}}
+
+\setlist{itemsep=2pt,topsep=2pt,leftmargin=1.4em}
+
+\begin{document}
+
+% ================= TITRE =================
+\begin{tcolorbox}[enhanced,colback=bleu,colframe=bleu,arc=3pt,boxrule=0pt,left=10pt,right=10pt,top=8pt,bottom=8pt]
+\color{white}\sffamily
+{\LARGE\bfseries Calculer et justifier une différentielle}\par\smallskip
+{\normalsize Fiche méthode — expliciter $\diff f(a)\cdot h$ et prouver que c'est bien la différentielle}
+\end{tcolorbox}
+
+% ================= 1. L'ESSENTIEL =================
+\section{Ce qu'il faut démontrer}
+
+\begin{boite}{bleu}{bleuclair}{Définition (Fréchet)}
+Soient $E,F$ des espaces normés, $U\subset E$ ouvert, $a\in U$ et $f\colon U\to F$.
+On cherche une application $L$ telle que
+\[
+f(a+h)=f(a)+L(h)+R(h)
+\qquad\text{avec}\qquad
+\frac{\norm{R(h)}_F}{\norm{h}_E}\xrightarrow[h\to0]{}0 .
+\]
+\begin{minipage}[t]{0.32\linewidth}
+\textbf{\sffamily 1. Linéarité}\\
+$L(\lambda h+\mu k)=\lambda L(h)+\mu L(k)$
+\end{minipage}\hfill
+\begin{minipage}[t]{0.32\linewidth}
+\textbf{\sffamily 2. Continuité}\\
+$\norm{L(h)}\le C\norm{h}$ pour tout $h$\\
+{\small\color{gris}(automatique en dimension finie)}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.32\linewidth}
+\textbf{\sffamily 3. Reste négligeable}\\
+$\norm{R(h)}\le\varepsilon(h)\norm{h}$, $\varepsilon(h)\to0$
+\end{minipage}
+
+\smallskip
+Alors $L$ est unique : on note $\diff f(a)=L$, et sa valeur en $h$ s'écrit $\diff f(a)\cdot h$.
+\end{boite}
+
+% ================= 2. DÉMARCHE =================
+\section{La démarche en six étapes}
+
+\etape{1}{\textbf{Fixer le cadre.} Espaces, normes, domaine ouvert, point $a$.
+{\color{gris}\small Ex. : $GL_n(\R)=\det^{-1}(\R^*)$ est ouvert. En dimension infinie, la norme fait partie de l'énoncé.}}
+\etape{2}{\textbf{Développer} $f(a+h)$ et faire apparaître $f(a)$.}
+\etape{3}{\textbf{Trier par degré en $h$.} Degré 0 : $f(a)$, qui se simplifie. Degré 1 : le candidat $L(h)$. Degré $\ge2$ (ou reste de Taylor) : $R(h)$.}
+\etape{4}{\textbf{Vérifier $L$.} Linéarité, puis $\norm{L(h)}\le C\norm{h}$ avec $C$ explicite.}
+\etape{5}{\textbf{Majorer $R$.} Viser $\norm{R(h)}\le C\norm{h}^2$, ou à défaut $\varepsilon(h)\norm{h}$ avec $\varepsilon(h)\to0$.}
+\etape{6}{\textbf{Conclure.} $\diff f(a)\cdot h=\dots$, c'est-à-dire $\diff f(a)=\bigl(h\mapsto\dots\bigr)$.}
+
+% ================= 3. CANDIDAT =================
+\section{Trouver le candidat \texorpdfstring{$L$}{L}}
+
+\begin{minipage}[c]{0.40\linewidth}
+\textbf{\sffamily Dérivée directionnelle}
+\[
+L(h)=\frac{\diff}{\diff t}\,f(a+th)\Big|_{t=0}
+\]
+{\small Ce n'est qu'un \emph{candidat} : les étapes 4 et 5 restent à faire. S'il n'est pas linéaire en $h$, $f$ n'est pas différentiable en $a$.}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.56\linewidth}
+\begin{tcolorbox}[enhanced,colback=white,colframe=bleu!30,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=1pt,bottom=1pt]
+\small
+\begin{tabularx}{\linewidth}{@{}>{\sffamily\bfseries}l X@{}}
+\multicolumn{2}{@{}l}{\sffamily\bfseries\color{bleu}Règles opératoires}\\
+\midrule
+Linéaire & $\diff f(a)=f$\\
+Bilinéaire & $\diff B(x,y)\cdot(h,k)=B(h,y)+B(x,k)$\\
+Composée & $\diff(g\circ f)(a)=\diff g\bigl(f(a)\bigr)\circ\diff f(a)$\\
+Produit & $\diff(fg)(a)\cdot h=(\diff f(a)\cdot h)\,g(a)+f(a)\,(\diff g(a)\cdot h)$\\
+Combinaison & $\diff(f+\lambda g)(a)=\diff f(a)+\lambda\,\diff g(a)$\\
+Partielles & $\partial_i f$ continues $\Rightarrow f\in C^1$, $\diff f(a)\cdot h=\sum_i \partial_i f(a)\,h_i$\\
+\end{tabularx}
+\end{tcolorbox}
+\end{minipage}
+
+\clearpage
+% ================= 4. RESTE =================
+\section{Majorer le reste}
+
+Objectif : $\norm{R(h)}\le C\norm{h}^2$, ou à défaut $\varepsilon(h)\norm{h}$ avec $\varepsilon(h)\to0$.
+
+\begin{tcolorbox}[enhanced,colback=white,colframe=bleu!30,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=1pt,bottom=1pt]
+\small
+\begin{tabularx}{\linewidth}{@{}>{\sffamily\bfseries}l l X@{}}
+\sffamily\bfseries Outil & \sffamily\bfseries Quand & \sffamily\bfseries Majoration\\
+\midrule
+Cauchy–Schwarz & produits scalaires & $\abs{\langle x,y\rangle}\le\norm{x}\,\norm{y}$\\
+Sous-multiplicativité & produits de matrices & $\norm{AHB}\le\norm{A}\,\norm{H}\,\norm{B}$\\
+Bilinéaire continue & $B(h,k)$ & $\norm{B(h,k)}\le\norm{B}\,\norm{h}\,\norm{k}$\\
+Taylor–Lagrange & composée avec $g\in C^2$ & $\abs{g(x+y)-g(x)-g'(x)\,y}\le\tfrac12\sup\abs{g''}\,y^2$\\
+Série géométrique & Neumann, exponentielle & $\bigl\lVert\sum_{k\ge2}M^k\bigr\rVert\le\norm{M}^2/(1-\norm{M})$ si $\norm{M}<1$\\
+Intégrale & fonctionnelles sur $[0,1]$ & $\bigl|\int\varphi\bigr|\le\int\abs{\varphi}\le\norm{\varphi}_\infty$\\
+\end{tabularx}
+\end{tcolorbox}
+
+{\small\color{gris}En dimension infinie, $\sup\abs{g''}$ se prend sur un compact contenant toutes les valeurs de $u+h$ : imposer $\norm{h}\le1$ au départ.}
+
+% ================= 5. NON-DIFFÉRENTIABILITÉ =================
+\section{Montrer qu'une fonction n'est pas différentiable}
+
+\begin{boite}{orange}{orangeclair}{Trois tests, du plus simple au plus fin}
+\begin{enumerate}[label=\textbf{\sffamily\arabic*.},leftmargin=1.6em]
+\item \textbf{Discontinuité.} Trouver une suite ou une courbe le long de laquelle $f(x)\nrightarrow f(a)$.
+\item \textbf{Dérivée directionnelle absente ou non linéaire en $h$.}
+Ex. : $f(x)=\abs{x}$ en $0$ donne $f(th)/t\to\abs{h}$ si $t\to0^+$ et $\to-\abs{h}$ si $t\to0^-$.
+\item \textbf{Candidat linéaire mais reste non négligeable} (Gateaux $\neq$ Fréchet).
+Trouver $h(t)\to0$ avec $\norm{R(h(t))}/\norm{h(t)}\nrightarrow0$.
+Ex. : $\dfrac{x^3y}{x^6+y^2}$ le long de $y=x^3$.
+\end{enumerate}
+\end{boite}
+
+% ================= 6. PIÈGES =================
+\section{Pièges fréquents}
+
+\begin{boite}{rouge}{rougeclair}{À éviter}
+\begin{multicols}{2}
+\begin{itemize}[leftmargin=1.1em]
+\item \textbf{Erreur de type} : écrire $\diff f(a)=2\langle a,h\rangle$. Correct : $\diff f(a)\cdot h=2\langle a,h\rangle$.
+\item \textbf{Non-commutativité} : $XH\neq HX$ en général ; ne pas regrouper les termes de degré 1.
+\item \textbf{$O$ au lieu de $o$} : $\norm{R(h)}\le C\norm{h}$ ne suffit pas.
+\item \textbf{Continuité de $L$} : à prouver en dimension infinie.
+\item \textbf{Gateaux pris pour Fréchet} : des dérivées directionnelles, même linéaires, ne suffisent pas.
+\item \textbf{Domaine non ouvert} : $a+h$ doit rester dans le domaine.
+\item \textbf{Norme oubliée} : en dimension infinie, la réponse peut en dépendre.
+\end{itemize}
+\end{multicols}
+\end{boite}
+
+% ================= 7. MODÈLE =================
+\section{Modèle de rédaction}
+
+\begin{boite}{vert}{vertclair}{Exemple : $J(u)=\displaystyle\int_0^1 u'(t)^2\,\diff t$}
+\textbf{\sffamily Cadre.} $E=C^1([0,1])$ muni de $\norm{h}=\norm{h}_\infty+\norm{h'}_\infty$ ; on fixe $u\in E$.
+
+\textbf{\sffamily Développement et tri.}
+\[
+J(u+h)-J(u)=\underbrace{2\int_0^1 u'h'}_{L(h)}+\underbrace{\int_0^1 h'^2}_{R(h)}
+\]
+
+\textbf{\sffamily Vérification de $L$.} Linéaire ; continue car
+$\abs{L(h)}\le2\norm{u'}_\infty\norm{h'}_\infty\le2\norm{u'}_\infty\norm{h}$.
+
+\textbf{\sffamily Reste.}
+$0\le R(h)\le\norm{h'}_\infty^2\le\norm{h}^2$, donc $\dfrac{\abs{R(h)}}{\norm{h}}\le\norm{h}\xrightarrow[h\to0]{}0$.
+
+\textbf{\sffamily Conclusion.}
+\[
+\boxed{\;\diff J(u)\cdot h=2\int_0^1 u'(t)\,h'(t)\,\diff t\;}
+\]
+\end{boite}
+
+% ================= 8. CHECKLIST =================
+\section{Checklist avant de rendre}
+
+\begin{multicols}{2}
+\begin{itemize}[leftmargin=1.6em]
+\cocher Espaces, normes, domaine ouvert et point $a$ écrits.
+\cocher $L$ ne contient que des termes de degré 1 en $h$.
+\cocher Linéarité de $L$ justifiée.
+\cocher Continuité de $L$ avec une constante explicite.
+\cocher Reste en $C\norm{h}^2$ ou $\varepsilon(h)\norm{h}$, $\varepsilon\to0$.
+\cocher Conclusion sous la forme $\diff f(a)\cdot h=\dots$
+\cocher Vérification sur un cas simple : dimension 1, $a=0$, matrices diagonales.
+\end{itemize}
+\end{multicols}
+
+% ================= ANNEXE NORMES =================
+\section*{\sffamily\large\bfseries\color{bleu}Annexe — Normes usuelles}
+
+En dimension finie, toutes les normes sont équivalentes : la différentiabilité n'en dépend pas.
+En dimension infinie, la norme fait partie de l'énoncé.
+
+\begin{tcolorbox}[enhanced,colback=white,colframe=bleu!30,boxrule=0.5pt,arc=2pt,left=4pt,right=4pt,top=2pt,bottom=2pt]
+\small
+\begin{tabularx}{\linewidth}{@{}l l l X@{}}
+\toprule
+\normalfont\sffamily\bfseries Espace & \sffamily\bfseries Norme & \sffamily\bfseries Définition & \sffamily\bfseries À retenir\\
+\midrule
+$\R^n$ & $\norm{\cdot}_1$ & $\sum_i\abs{x_i}$ & duale de $\norm{\cdot}_\infty$\\
+       & $\norm{\cdot}_2$ & $\bigl(\sum_i x_i^2\bigr)^{1/2}=\langle x,x\rangle^{1/2}$ & Cauchy–Schwarz : $\abs{\langle x,y\rangle}\le\norm{x}_2\,\norm{y}_2$\\
+       & $\norm{\cdot}_\infty$ & $\max_i\abs{x_i}$ & majorations terme à terme\\
+\midrule
+$M_n(\R)$ & subordonnée & $\sup_{x\neq0}\norm{Ax}/\norm{x}$ & sous-multiplicative ; $\norm{Ax}\le\norm{A}\,\norm{x}$ ; $\norm{I}=1$\\
+          & Frobenius & $\bigl(\sum_{i,j}a_{ij}^2\bigr)^{1/2}=\sqrt{\operatorname{tr}(A^{\mathsf T}A)}$ & sous-multiplicative, mais $\norm{I}_F=\sqrt n$\\
+          & $\max_{i,j}\abs{a_{ij}}$ & plus grand coefficient & \textcolor{rouge}{pas} sous-multiplicative\\
+\midrule
+$C^0([a,b])$ & $\norm{\cdot}_\infty$ & $\sup_t\abs{f(t)}$ & complète ; majore les intégrales\\
+             & $\norm{\cdot}_1,\ \norm{\cdot}_2$ & $\int\abs{f}$, $\bigl(\int f^2\bigr)^{1/2}$ & non complètes, non équivalentes à $\norm{\cdot}_\infty$\\
+\midrule
+$C^1([a,b])$ & norme $C^1$ & $\norm{f}_\infty+\norm{f'}_\infty$ & contrôle $f$ et $f'$ ; complète\\
+\midrule
+$\mathcal L(E,F)$ & opérateur & $\sup_{h\neq0}\norm{L(h)}/\norm{h}$ & $\norm{L(h)}\le\norm{L}\,\norm{h}$ : le $C$ de l'étape 4\\
+Bilinéaires & norme de $B$ & $\sup\dfrac{\norm{B(h,k)}}{\norm{h}\,\norm{k}}$ & $\norm{B(h,k)}\le\norm{B}\,\norm{h}\,\norm{k}$\\
+\bottomrule
+\end{tabularx}
+\end{tcolorbox}
+
+\begin{minipage}[t]{0.5\linewidth}
+\textbf{\sffamily Sur $\R^n$}
+\[
+\norm{x}_\infty\le\norm{x}_2\le\norm{x}_1\le\sqrt n\,\norm{x}_2\le n\,\norm{x}_\infty
+\]
+\end{minipage}\hfill
+\begin{minipage}[t]{0.46\linewidth}
+\textbf{\sffamily Sur $C^0([0,1])$}, sans réciproque possible
+\[
+\norm{f}_1\le\norm{f}_2\le\norm{f}_\infty
+\]
+{\small Contre-exemple : $f_k(t)=t^k$ donne $\norm{f_k}_1=\frac1{k+1}\to0$ alors que $\norm{f_k}_\infty=1$.}
+\end{minipage}
+
+\end{document}
