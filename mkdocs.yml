@@ -1,0 +1,55 @@
+site_name: Calcul différentiel
+site_description: Notes et fiches méthode de calcul différentiel
+site_author: Mathieu Besson
+repo_url: https://github.com/mitsudomoe/differential_calculus
+repo_name: mitsudomoe/differential_calculus
+edit_uri: edit/main/docs/
+copyright: Copyright &copy; 2026 Mathieu Besson
+
+nav:
+  - Accueil: index.md
+  - Fiche méthode: fiche-methode.md
+  - Normes usuelles: normes-usuelles.md
+
+theme:
+  name: material
+  language: fr
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Passer en mode sombre
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Passer en mode clair
+
+markdown_extensions:
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+validation:
+  links:
+    anchors: warn
